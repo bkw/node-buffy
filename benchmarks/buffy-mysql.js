@@ -1,5 +1,9 @@
 // vim: ts=2:sw=2
-var benchmark = require('./lib/benchmark')(__dirname + '/../', process.argv[2]);
+var benchmark = require('./lib/benchmark')(
+  __dirname + '/../',
+  process.argv[2],
+  process.argv[3]
+);
 
 function readThreeByteInteger (reader) {
   var bytes = reader.buffer(3);
