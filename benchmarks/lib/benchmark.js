@@ -1,7 +1,7 @@
 var path          = require('path');
 var FixtureStream = require('./FixtureStream');
 
-module.exports = function(moduleName, fixturePath) {
+module.exports = function(moduleName, fixturePath, checksum) {
   var lib         = require(moduleName);
   var packageJSON = require(moduleName + '/package.json');
 
@@ -12,11 +12,11 @@ module.exports = function(moduleName, fixturePath) {
       return;
     }
 
-    run(benchmarkFn, fixturePath, lib, packageJSON);
+    run(benchmarkFn, fixturePath, lib, packageJSON, checksum);
   };
 };
 
-function run(benchmarkFn, fixturePath, lib, packageJSON) {
+function run(benchmarkFn, fixturePath, lib, packageJSON, checksumOK) {
   var stream     = new FixtureStream(fixturePath);
   var iterations = 100;
 
@@ -30,8 +30,8 @@ function run(benchmarkFn, fixturePath, lib, packageJSON) {
 
       var duration = Date.now() - start;
 
-      if (checksum !== 124067628) {
-        //throw new Error('bad checksum: ' + checksum);
+      if (checksum != checksumOK) {
+        throw new Error('bad checksum: ' + checksum + ' instead of ' + checksumOK);
       }
 
       stream.removeAllListeners();

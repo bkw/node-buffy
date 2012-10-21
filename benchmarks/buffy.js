@@ -1,4 +1,8 @@
-var benchmark = require('./lib/benchmark')('buffy', process.argv[2]);
+var benchmark = require('./lib/benchmark')(
+  __dirname + '/../',
+  process.argv[2],
+  process.argv[3]
+)
 
 benchmark('ascii-strings', function(buffy, stream, cb) {
   var reader = buffy.createReader();

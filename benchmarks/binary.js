@@ -1,4 +1,5 @@
-var benchmark = require('./lib/benchmark')('binary', process.argv[2]);
+var benchmark = require('./lib/benchmark')('binary', process.argv[2], process.argv[3]);
+
 
 benchmark('ascii-strings', function(binary, stream, cb) {
   var checksum = 0;
