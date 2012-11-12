@@ -19,8 +19,9 @@ module.exports = function(moduleName, fixturePath, checksum) {
 function run(benchmarkFn, fixturePath, lib, packageJSON, checksumOK) {
   var stream     = new FixtureStream(fixturePath);
   var iterations = 100;
+  var round      = 0;
 
-  console.log(['time', 'bytesPerSec', 'memoryUsage', 'lib', 'version'].join('\t'));
+  console.log(['time', 'number', 'bytesPerMSec', 'memoryUsage', 'lib', 'version'].join('\t'));
 
   function nextIteration() {
     var start = Date.now();
@@ -28,6 +29,7 @@ function run(benchmarkFn, fixturePath, lib, packageJSON, checksumOK) {
     benchmarkFn(lib, stream, function(err, checksum) {
       if (err) throw err;
 
+      var memory   = process.memoryUsage();
       var duration = Date.now() - start;
 
       if (checksum != checksumOK) {
@@ -36,11 +38,12 @@ function run(benchmarkFn, fixturePath, lib, packageJSON, checksumOK) {
 
       stream.removeAllListeners();
 
-      var bytesPerSec = Math.round(stream.length / (duration / 1000));
+      var bytesPerMSec = Math.round(stream.length / duration);
 
       console.log([
         Date.now(),
-        bytesPerSec,
+        round++,
+        bytesPerMSec,
         process.memoryUsage().rss,
         packageJSON.name,
         packageJSON.version
